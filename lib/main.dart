@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islamicdua_/my_audio_player.dart';
+import 'package:islamicdua_/text_and_audio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[MyAudioPlayer()],
+          children: const <Widget>[TextAndAudio(index: 0)],
         ),
       ),
     );
