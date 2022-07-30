@@ -2,8 +2,11 @@ List<String> urduText = [];
 List<String> arabicText = [];
 List<String> audioPaths = [];
 fillList() {
-  arabicText.add("بسم الللہ الرحمن الرحیم");
-  urduText
-      .add("شروع اللہ کے نام سے جو بے حد مہرباں اور نہایت رحم کرنے والا ہے ");
-  audioPaths.add("assets/audio.mp3");
+  for (int i = 1; i < 85; i++) {
+    audioPaths.add("assets/audio_$i.m4a");
+    arabicText.add(
+        "بسم الللہ الرحمن الرحیم، اَلسَّلامُ عَلى آدَمَ صِفْوَةِ اللهِ مِنْ خَليقَتِهِ،");
+    urduText
+        .add("شروع اللہ کے نام سے جو بے حد مہرباں اور نہایت رحم کرنے والا ہے ");
+  }
 }

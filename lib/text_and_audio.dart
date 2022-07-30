@@ -5,8 +5,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:islamicdua_/text_strings.dart';
 
 class TextAndAudio extends StatefulWidget {
-  final int index;
-  const TextAndAudio({Key? key, required this.index}) : super(key: key);
+  RxInt index = 0.obs;
+  RxString currentUrduText = ''.obs;
+  RxString currentArabicText = ''.obs;
+  RxString currentAudioPath = ''.obs;
+  TextAndAudio({Key? key}) : super(key: key);
 
   @override
   State<TextAndAudio> createState() => _TextAndAudioState();
@@ -18,46 +21,77 @@ class _TextAndAudioState extends State<TextAndAudio> {
   @override
   Widget build(BuildContext context) {
     fillList();
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text(arabicText[0]),
+    widget.currentUrduText.value = urduText[widget.index.value];
+    widget.currentArabicText.value = arabicText[widget.index.value];
+    widget.currentAudioPath.value = audioPaths[widget.index.value];
+    return Scaffold(
+        appBar: AppBar(
+          title: Obx(() => Text("Ziarat e Nahiya - ${widget.index.value + 1}")),
         ),
-        Divider(
-          thickness: 2,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text(urduText[0]),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 18.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Play'),
-                onPressed: () async {
-                  assetsAudioPlayer.open(
-                    Audio(audioPaths[0]),
-                    showNotification: true,
-                  );
-                },
+        body: Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(arabicText[0]),
+              ),
+              Divider(
+                thickness: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Obx(() => Text(widget.currentUrduText.value)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RaisedButton(
+                      child: Text('Play'),
+                      onPressed: () async {
+                        assetsAudioPlayer.open(
+                          Audio(
+                            widget.currentAudioPath.value,
+                          ),
+                          showNotification: true,
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: RaisedButton(
+                        child: Text('Stop'),
+                        onPressed: () async {
+                          assetsAudioPlayer.stop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: RaisedButton(
-                  child: Text('Stop'),
+                  child: Text('Next'),
                   onPressed: () async {
+                    widget.index.value++;
+                    if (widget.index.value == urduText.length) {
+                      widget.index.value = 0;
+                    }
+                    widget.currentUrduText.value = urduText[widget.index.value];
+                    widget.currentArabicText.value =
+                        arabicText[widget.index.value];
+                    widget.currentAudioPath.value =
+                        audioPaths[widget.index.value];
                     assetsAudioPlayer.stop();
                   },
                 ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          )
+        ])));
   }
 }
